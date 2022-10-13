@@ -21,7 +21,7 @@ export class CdkMicroservicesStack extends cdk.Stack {
 
     // create product nodejsfunction
     const productFunction = new NodejsFunction(this, 'productFunction', {
-      entry: 'src/product/product.ts',
+      entry: 'src/product/index.js',
       handler: 'handler',
       environment: {
         TABLE_NAME: productTable.tableName,
