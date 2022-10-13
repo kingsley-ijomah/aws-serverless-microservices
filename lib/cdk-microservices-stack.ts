@@ -3,6 +3,8 @@ import { Construct } from 'constructs';
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { Runtime } from 'aws-cdk-lib/aws-lambda';
+import { LambdaRestApi } from 'aws-cdk-lib/aws-apigateway';
+import { Lazy } from 'aws-cdk-lib';
 
 export class CdkMicroservicesStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -35,5 +37,23 @@ export class CdkMicroservicesStack extends cdk.Stack {
 
     // grant readwrite permission
     productTable.grantReadWriteData(productFunction);
+
+    // create LamdaRestApi with productFunction
+    const apgw = new LambdaRestApi(this, 'productApi', {
+      restApiName: 'Product Service',
+      handler: productFunction,
+      proxy: false
+    });
+
+    // create product resource
+    const product = apgw.root.addResource('product');
+    product.addMethod('GET'); // GET /product
+    product.addMethod('POST'); // POST /product
+
+    // create product/{id} resource
+    const productWithId = product.addResource('{id}');
+    productWithId.addMethod('GET'); // GET /product/{id}
+    productWithId.addMethod('PUT'); // PUT /product/{id}
+    productWithId.addMethod('DELETE'); // DELETE /product/{id}
   }
 }
