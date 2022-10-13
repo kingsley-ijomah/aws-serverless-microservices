@@ -25,7 +25,7 @@ export class CdkMicroservicesStack extends cdk.Stack {
       entry: 'src/product/index.js',
       handler: 'handler',
       environment: {
-        TABLE_NAME: productTable.tableName,
+        PRODUCT_TABLE: productTable.tableName,
         PRIMARY_KEY: 'id',
       },
       bundling: {
