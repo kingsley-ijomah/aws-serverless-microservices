@@ -1,9 +1,10 @@
 import { Construct } from "constructs";
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 import * as cdk from 'aws-cdk-lib';
+import { ITable } from "aws-cdk-lib/aws-dynamodb";
 
 export class ProdDatabase extends Construct {
-  public readonly productTable: dynamodb.Table;
+  public readonly productTable: ITable
 
   constructor(scope: Construct, id: string) {
     super(scope, id);
