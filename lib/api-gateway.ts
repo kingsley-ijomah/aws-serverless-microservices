@@ -1,21 +1,27 @@
 // create apigateway construct class
 import { LambdaRestApi } from "aws-cdk-lib/aws-apigateway";
-import { NodejsFunction } from "aws-cdk-lib/aws-lambda-nodejs";
+import { IFunction } from "aws-cdk-lib/aws-lambda";
 import { Construct } from "constructs";
 
 // apigateway interface
 export interface ApiGatewayProps {
-  productFunction: NodejsFunction;
+  productFunction: IFunction;
+  basketFunction: IFunction;
 }
 
 export class ApiGateway extends Construct {
   constructor(scope: Construct, id: string, props: ApiGatewayProps) {
     super(scope, id);
 
+    this.createProductApi(props.productFunction);
+    this.createBasketApi(props.basketFunction);
+  }
+
+  private createProductApi(productFunction: IFunction) {
     // create LamdaRestApi with productFunction
     const apgw = new LambdaRestApi(this, 'productApi', {
       restApiName: 'Product Service',
-      handler: props.productFunction,
+      handler: productFunction,
       proxy: false
     });
 
@@ -29,6 +35,29 @@ export class ApiGateway extends Construct {
     productWithId.addMethod('GET'); // GET /product/{id}
     productWithId.addMethod('PUT'); // PUT /product/{id}
     productWithId.addMethod('DELETE'); // DELETE /product/{id}
+  }
+
+  private createBasketApi(basketFunction: IFunction) {
+    // create LamdaRestApi with basketFunction
+    const apgw = new LambdaRestApi(this, 'basketApi', {
+      restApiName: 'Basket Service',
+      handler: basketFunction,
+      proxy: false
+    });
+
+    // create basket resource
+    const basket = apgw.root.addResource('basket');
+    basket.addMethod('GET'); // GET /basket
+    basket.addMethod('POST'); // POST /basket
+
+    // create basket/{userName} resource
+    const basketWithUserName = basket.addResource('{userName}');
+    basketWithUserName.addMethod('GET'); // GET /basket/{userName}
+    basketWithUserName.addMethod('DELETE'); // DELETE /basket/{userName}
+
+    // create basket/checkout resource
+    const checkout = basket.addResource('checkout');
+    checkout.addMethod('POST'); // POST /basket/checkout
   }
 }
 
