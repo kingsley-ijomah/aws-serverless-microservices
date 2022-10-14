@@ -1,7 +1,7 @@
-import { Construct } from "constructs";
+import { Construct } from 'constructs';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
-import { Runtime } from "aws-cdk-lib/aws-lambda";
-import { ITable } from "aws-cdk-lib/aws-dynamodb";
+import { Runtime } from 'aws-cdk-lib/aws-lambda';
+import { ITable } from 'aws-cdk-lib/aws-dynamodb';
 
 // lambda interface
 export interface LambdaProps {
@@ -11,7 +11,6 @@ export interface LambdaProps {
 
 // create a construct for the lambda
 export class Lambda extends Construct {
-
   public readonly productFunction: NodejsFunction;
   public readonly basketFunction: NodejsFunction;
 
@@ -29,7 +28,7 @@ export class Lambda extends Construct {
       entry: 'src/product/index.js',
       handler: 'handler',
       environment: {
-        PRODUCT_TABLE: productTable.tableName,
+        DATABASE_TABLE_NAME: productTable.tableName,
         PRIMARY_KEY: 'id',
       },
       bundling: {
@@ -49,7 +48,7 @@ export class Lambda extends Construct {
       entry: 'src/basket/index.js',
       handler: 'handler',
       environment: {
-        PRODUCT_TABLE: basketTable.tableName,
+        DATABASE_TABLE_NAME: basketTable.tableName,
         PRIMARY_KEY: 'userName',
       },
       bundling: {
