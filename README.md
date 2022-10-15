@@ -4,14 +4,30 @@
 
 ![alt text](assets/img/aws-event-bridge.png)
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
+# Initial aws console setup
+https://aws.amazon.com
+choose region: us-east-2
+Create an IAM ( give programmatic and console access )
+Make note of: AWS Access Key ID
+Make note of: AWS Secret Access Key
+Login as IAM user
 
-## Useful commands
-* `cdk synth`       emits the synthesized CloudFormation template
-* `cdk diff`        compare deployed stack with current state
-* `cdk deploy`      deploy this stack to your default AWS account/region
+# Installations
+npm install --location=global aws-cli
+npm install --location=global aws-cdk
+npm install --location=global typescript
 
-* `npm run build`   compile typescript to js
-* `npm run watch`   watch for changes and compile
-* `npm run test`    perform the jest unit tests
+npm --version
+aws --version
+tsc --version
+cdk --version
+node --version
+
+# Deploy infrastructure steps
+- git pull this project
+- cd into project
+- run: `aws configure`
+- run: `cdk bootstrap`
+- run: `cdk synth`
+- run: `cdk deploy`
 
