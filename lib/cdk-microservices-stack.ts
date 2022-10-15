@@ -4,6 +4,7 @@ import { Lambda } from './lambda';
 import { Database } from './database';
 import { ApiGateway } from './api-gateway';
 import { ChnEventBus } from './eventbus';
+import { ChnQueue } from './queue';
 
 
 export class CdkMicroservicesStack extends cdk.Stack {
@@ -27,11 +28,15 @@ export class CdkMicroservicesStack extends cdk.Stack {
       orderFunction: lambda.orderFunction,
     });
 
+    // create SQS queue
+    const queue = new ChnQueue(this, 'Queue', {
+      consumer: lambda.orderFunction,
+    });
+
     // create event bus
     const eventBus = new ChnEventBus(this, 'EventBus', {
       publisherFunction: lambda.basketFunction,
-      targetFunction: lambda.orderFunction,
+      targetQueue: queue.orderQueue,
     });
-
   }
 }

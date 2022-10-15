@@ -1,11 +1,12 @@
 import { EventBus, Rule } from "aws-cdk-lib/aws-events";
 import { IFunction } from "aws-cdk-lib/aws-lambda";
 import { Construct } from "constructs";
-import { LambdaFunction } from 'aws-cdk-lib/aws-events-targets';
+import { SqsQueue } from 'aws-cdk-lib/aws-events-targets';
+import { IQueue } from "aws-cdk-lib/aws-sqs";
 
 interface ChnEventBusProps {
   publisherFunction: IFunction;
-  targetFunction: IFunction;
+  targetQueue: IQueue;
 }
 
 // create a construct for the event bus
@@ -30,7 +31,7 @@ export class ChnEventBus extends Construct {
     });
 
     // add target to checkoutBasket rule
-    checkoutBasketRule.addTarget(new LambdaFunction(props.targetFunction));
+    checkoutBasketRule.addTarget(new SqsQueue(props.targetQueue));
 
     // grant permission to publish to event bus
     eventBus.grantPutEventsTo(props.publisherFunction);
