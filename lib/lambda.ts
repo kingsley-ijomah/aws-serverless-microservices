@@ -38,6 +38,7 @@ export class Lambda extends Construct {
         externalModules: ['aws-sdk'],
       },
       runtime: Runtime.NODEJS_14_X,
+      description: 'Product Lambda'
     });
     // grant readwrite permission
     productTable.grantReadWriteData(productFunction);
@@ -61,6 +62,7 @@ export class Lambda extends Construct {
         externalModules: ['aws-sdk'],
       },
       runtime: Runtime.NODEJS_14_X,
+      description: 'Basket Lambda'
     });
     // grant readwrite permission
     basketTable.grantReadWriteData(basketFunction);
@@ -81,6 +83,7 @@ export class Lambda extends Construct {
         externalModules: ['aws-sdk'],
       },
       runtime: Runtime.NODEJS_14_X,
+      description: 'Order Lambda'
     });
     // grant readwrite permission
     orderTable.grantReadWriteData(orderFunction);
