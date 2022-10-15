@@ -7,6 +7,7 @@ import { Construct } from "constructs";
 export interface ApiGatewayProps {
   productFunction: IFunction;
   basketFunction: IFunction;
+  orderFunction: IFunction;
 }
 
 export class ApiGateway extends Construct {
@@ -15,6 +16,7 @@ export class ApiGateway extends Construct {
 
     this.createProductApi(props.productFunction);
     this.createBasketApi(props.basketFunction);
+    this.createOrderApi(props.orderFunction);
   }
 
   private createProductApi(productFunction: IFunction) {
@@ -59,5 +61,23 @@ export class ApiGateway extends Construct {
     const checkout = basket.addResource('checkout');
     checkout.addMethod('POST'); // POST /basket/checkout
   }
+
+  private createOrderApi(orderFunction: IFunction) {
+    // create LamdaRestApi with orderFunction
+    const apgw = new LambdaRestApi(this, 'orderApi', {
+      restApiName: 'Order Service',
+      handler: orderFunction,
+      proxy: false
+    });
+
+    // create order resource
+    const order = apgw.root.addResource('order');
+    order.addMethod('GET'); // GET /order
+
+    // create order/{userName} resource
+    const orderWithId = order.addResource('{userName}');
+    orderWithId.addMethod('GET'); // GET /order/{userName}
+  }
+
 }
 

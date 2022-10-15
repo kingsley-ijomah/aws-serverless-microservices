@@ -2,7 +2,7 @@
 
 ![alt text](assets/img/aws-architecture.png)
 
-This is a blank project for CDK development with TypeScript.
+![alt text](assets/img/aws-event-bridge.png)
 
 The `cdk.json` file tells the CDK Toolkit how to execute your app.
 
