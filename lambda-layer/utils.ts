@@ -13,13 +13,6 @@ export const logError = (message: string | any, title: string | undefined = unde
     title ? console.error(`${title}:`, JSON.stringify(message, null, 2)) : console.error(JSON.stringify(message, null, 2));
   }
 };
-export const logWarn = (message: string | any, title: string | undefined = undefined): void => {
-  if (typeof message === 'string') {
-    title ? console.warn(`${title}: ${message}`) : console.warn(message);
-  } else {
-    title ? console.warn(`${title}:`, JSON.stringify(message, null, 2)) : console.warn(JSON.stringify(message, null, 2));
-  }
-};
 export const logDebug = (message: string | any, title: string | undefined = undefined): void => {
   if (process.env.LOG_LEVEL === 'debug') {
     if (typeof message === 'string') {
@@ -27,5 +20,27 @@ export const logDebug = (message: string | any, title: string | undefined = unde
     } else {
       title ? console.debug(`${title}:`, JSON.stringify(message, null, 2)) : console.debug(JSON.stringify(message, null, 2));
     }
+  }
+};
+
+// Get API Success response
+export const apiSuccessResponse = (body: any) => {
+  return {
+    statusCode: 200,
+    headers: {
+      'content-type': 'application/json',
+    },
+    body: typeof body === 'string' ? JSON.stringify({ message: body }) : JSON.stringify(body),
+  }
+};
+
+// Get API Error response
+export const apiErrorResponse = (statusCode: number, error: string = 'Something went wrong. Please contact administrator') => {
+  return {
+    statusCode: statusCode,
+    headers: {
+      'content-type': 'application/json',
+    },
+    body: JSON.stringify({ error }),
   }
 };
